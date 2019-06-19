@@ -94,6 +94,37 @@ void DeleteAt(int n)
     delete temp2;
 }
 
+void ReverseIteratively()
+{
+    Node* prev = NULL;
+    Node* next = NULL;
+    Node* cur = header;
+    
+    while (cur != NULL)
+    {
+        next = cur->link;
+        cur->link = prev;
+        prev = cur;
+        cur = next;
+    }
+    header = prev;
+}
+
+void ReverseRecursively(Node* cur)
+{
+    if(cur == NULL)
+        return;
+    
+    if(cur->link == NULL)
+    {
+        header = cur;
+        return;
+    }
+    ReverseRecursively(cur->link);
+    cur->link->link = cur; // Node* q = cur->link; q->link = cur; 구문과 동일 
+    cur->link = NULL;
+}
+
 void Print()
 {
     Node* temp = header;
@@ -112,11 +143,12 @@ int main(int argc, const char * argv[]) {
     InsertAt(3,2);
     InsertAt(4,1);
     InsertAt(5,2);
-    Print(); // 4 5 2 3
-    int x;
-    printf("select number to delet\n");
-    scanf("%d", &x);
-    DeleteAt(x);
-    Print();
+    InsertAtBeginning(0);
+    InsertAtEnd(9);
+    Print(); // 0 4 5 2 3 9
+    ReverseIteratively();
+    Print(); // 9 3 2 5 4 0
+    ReverseRecursively(header);
+    Print(); // 0 4 5 2 3 9
     return 0;
 }
