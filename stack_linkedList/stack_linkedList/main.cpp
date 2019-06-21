@@ -66,7 +66,6 @@ int main(int argc, const char * argv[]) {
     Pop(); Print();
     Push(6); Print();
     Push(7); Print();
-    auto s = to_string(IsEmpty());
     printf("%d \n", IsEmpty());
     return 0;
 }
