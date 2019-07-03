@@ -102,7 +102,7 @@ bool IsBSTUtil(Node* root, int min, int max)
 // 해당 트리가 이진탐색트리인지 검사
 bool IsBinarySearchTree(Node* root)
 {
-    if(root == NULL)
+    if (root == NULL)
         return false;
     
     return IsBSTUtil(root, INT_MIN, INT_MAX);
@@ -116,8 +116,16 @@ bool IsBinarySearchTree(Node* root)
 */
 Node* FindMax(Node* root)
 {
-    while(root->right != NULL)
+    while (root->right != NULL)
         root = root->right;
+    
+    return root;
+}
+
+Node* FindMin(Node* root)
+{
+    while (root->left != NULL)
+        root = root->left;
     
     return root;
 }
@@ -160,6 +168,38 @@ Node* Delete(Node* root, int data)
     return root;
 }
 
+/*
+ Inorder Search에서 특정 node의 다음에 올 노드를 반환.
+ Inodrder Search를 직접 실행하는 방법 : Time Complexity O(N)이다.
+ 아래 코드는 Time Complexity O(h) *h: height of tree -> 즉 O(logN)이 되므로 위 방법보다 효율적이다.
+ */
+Node* FindSuccessor(Node* root, int data)
+{
+    if (root == NULL) return NULL;
+    
+    Node* cur = Find(root, data);
+    if(cur == NULL) return NULL;
+    
+    // case 1. 해당 노드의 오른쪽에 서브트리가 있는 경우: 서브트리에서 최소값을 가진 노드를 반환 (해당 노드의 값보다 크고, 그 중 가장 작은 값이 된다)
+    if (cur->right != NULL)
+        return FindMin(cur->right);
+    
+    // case 2. 오른쪽에 서브트리가 없는 경우
+    Node* ancestor = root;
+    Node* successor = NULL;
+    while (ancestor != cur)
+    {
+        if (data > ancestor->data)
+            ancestor = ancestor->right;
+        else if (data < ancestor->data)
+        {
+            successor = ancestor;
+            ancestor = ancestor->left;
+        }
+    }
+    return successor;
+}
+
 int main(int argc, const char * argv[]) {
     
     Node* root = NULL;
@@ -187,6 +227,7 @@ int main(int argc, const char * argv[]) {
     if(Search(root, 19))
         cout << "found! " << endl;
     else cout << "Not found.. " << endl;
+    cout << "Successor of " << 13 << " : " << FindSuccessor(root, 13)->data << endl;
     
     return 0;
 }
