@@ -45,6 +45,7 @@ void Preorder(Node* root)
 }
 
 // Left - Data(Root) - Right 순서대로 탐색
+// 이 경우 출력되는 data들은 sorted 임.
 void Inorder(Node* root)
 {
     if(root == NULL)
